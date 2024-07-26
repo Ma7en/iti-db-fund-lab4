@@ -1,0 +1,170 @@
+// ====================================================
+// ====================================================
+// DB fundamental lab4 
+
+
+/**********************************/
+1.  Insert your personal data to the employee table 
+as a new employee in department number 30, 
+SSN=102672, Superssn=112233. 
+
+
+/*
+Q1 => 
+*/ 
+insert into employee (SSN, Fname, Lname, Bdate, Address, Gender, Salary, SuperSSN, DNO)
+values(102672, 'Mazen', 'Saad', '2001-04-20', 'Fayoum', 'M', 500, 30, 30);
+
+
+
+/**********************************/
+2.  Insert another employee with, 
+personal data your friend as new employee in department number 30, 
+SSN = 102660, 
+but don’t enter any value for salary or supervisor number to him. 
+
+/*
+Q2 => 
+*/
+insert into employee (SSN, Fname, Lname, Bdate, Address, Gender, Salary, SuperSSN, DNO)
+values(102660, 'Ali', 'Ahmed', '2002-04-10', 'Fayoum', 'M', null, null, 30);
+
+
+
+
+
+/**********************************/
+3.  In the department table 
+insert new department called "DEPT IT", 
+with id 100, employee with SSN = 112233 as a manager for this department. 
+The start date for this manager is '1-11-2006' 
+
+/*
+Q3
+*/
+insert into department (Dname, Dnum, MGRSSN, MGRSatrtDate)
+values('DEPT IT', 100, 112233, '2006-11-01');
+SELECT * FROM lab4.departments;
+
+
+
+/**********************************/
+4.  Increase salary by 20% for all employees. 
+
+/*
+Q4 => 
+*/
+SET SQL_SAFE_UPDATES = 0;
+update employee
+set Salary = Salary * 1.20;
+SET SQL_SAFE_UPDATES = 1;
+
+SELECT * FROM lab4.employee;
+
+
+
+
+
+/**********************************/
+5.  Display the employee 
+First name, last name, Salary and Department number. 
+
+/*
+Q5 =>
+*/
+select Fname, Lname, Salary, DNO from employee;
+
+
+
+
+
+/**********************************/
+6.  If you know that the company policy is to pay an annual commission for each employee with specific percent equals 10% of his/her annual salary. 
+Display each employee full name and his annual commission in an ANNUAL COMM column (alias). 
+
+/*
+Q6 => 
+*/
+select concat(Fname, ' ', Lname) as Full_Name, (Salary * 12 * 0.10) as ANNUAL_COMM
+from employee;
+
+
+
+
+/**********************************/
+7.  Display the 
+employees Id, name who earns more than 1000 LE monthly. 
+
+/*
+Q7 => 
+*/
+select SSN, Fname, Lname
+from employee
+where Salary > 1000;
+
+
+
+
+
+/**********************************/
+8.  Display the Department id, name and id and the name of its manager. 
+
+/*
+Q8
+*/
+select d.Dnum, d.Dname, m.SSN as Manager_id, 
+       concat(m.Fname, ' ', m.Lname) as Manager_Name
+from departments d
+join employee m on d.MGRSSN = m.SuperSSN;
+
+
+
+/**********************************/
+9.  Display the name of the departments and the name of the projects under its control. 
+
+/*
+Q9
+*/
+select d.Dname as Name_Departments, p.Pname as Name_Projects
+from departments d
+join project p on d.Dnum = p.Dnum;
+
+
+
+
+/**********************************/
+10. Find the names of the employees who directly supervised with Kamel Mohamed. -- 321654
+
+/*
+Q10
+*/
+select e.Fname, e.Lname
+from employee e
+join employee s on e.SuperSSN = s.SuperSSN
+where s.Fname = 'Kamel' and s.Lname = 'Mohamed';
+
+
+
+
+
+/**********************************/
+
+11. Retrieve the 
+names of all employees and the names of the projects they are working on, sorted by the project name. 
+
+/*
+Q11
+*/
+select concat(e.Fname, ' ',e.Lname) as Names_Employees, p.Pname as Names_Projects
+from employee e
+join works_for w on e.SSN = w.Essn
+join project p on w.Pno = p.Pnumber
+order by p.Pname;
+ 
+
+
+
+
+
+// ====================================================
+// ====================================================
